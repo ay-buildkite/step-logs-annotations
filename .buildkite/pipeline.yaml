@@ -1,12 +1,15 @@
 ---
 steps:
-  - label: ':warning: Capture deprecation warnings'
+  - label: ':mag: Capture deprecation warnings'
     commands: |-
-      # Capture deprecation warnings from different components
-      echo "Collection deprecation warnings..."
+      # Redirect the shell's outputs a file for processing
+      exec > >(tee -a full_build_logs.txt) 2> >(tee -a full_build_logs.txt >&2)
 
-      # Node deprecation capture
-      node --trace-deprecation deprecationWarnings.js 2>&1 | tee grep -i "deprecation" | sort | uniq > deprecation_warnings.txt
+      # Run your various commands
+      node --trace-deprecation deprecationWarnings.js
+
+      # Extract uniq deprecation warnings
+      grep -iE "deprecation|warning" full_build_logs.txt | sort | uniq > deprecation_warnings.txt
 
       # Check if there are any deprecation warnings
       if [ -s deprecation_warnings.txt ]; then
