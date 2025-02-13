@@ -11,7 +11,7 @@ steps:
       # Check if there are any deprecation warnings
       if [ -s deprecation_warnings.txt ]; then
         # Create buildkite annotation with the warnings
-        buildkite-agent annotate --context "deprecation-warnings" --stryle "warning" < deprecation_warnings.txt
+        buildkite-agent annotate --context "deprecation-warnings" --style "warning" < deprecation_warnings.txt
       else
         echo "No deprecation warnings found."
       fi
