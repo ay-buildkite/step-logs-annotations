@@ -1,3 +1,17 @@
+---
 steps:
-  - label: "Hello, world! 👋"
-    command: echo "Hello, world!"
+  - label: ':warning: Capture deprecation warnings'
+    commands: |-
+      # Capture deprecation warnings from different components
+      echo "Collection deprecation warnings..."
+
+      # Node deprecation capture
+      node -e "console.warn('Node deprecation test')" 2&>1 | grep -i "deprecation" | sort | uniq > deprecation_warnings.txt
+
+      # Check if there are any deprecation warnings
+      if [ -s deprecation_warnings.txt ]; then
+        # Create buildkite annotation with the warnings
+        buildkite-agent annotate --context "deprecation-warnings" --stryle "warning" < deprecation_warnings.txt
+      else
+        echo "No deprecation warnings found."
+      fi
