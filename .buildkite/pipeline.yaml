@@ -6,7 +6,7 @@ steps:
       echo "Collection deprecation warnings..."
 
       # Node deprecation capture
-      node -e "console.warn('Node deprecation test')" 2&>1 | grep -i "deprecation" | sort | uniq > deprecation_warnings.txt
+      node --trace-deprecation deprecationWarnings.js 2&>1 | grep -i "deprecation" | sort | uniq > deprecation_warnings.txt
 
       # Check if there are any deprecation warnings
       if [ -s deprecation_warnings.txt ]; then
